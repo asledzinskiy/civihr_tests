@@ -1,0 +1,4 @@
+{
+  "react-venv/lib/python2.7/site-packages/setuptools/tests/test_egg_info.py": true, 
+  "react-venv/local/lib/python2.7/site-packages/setuptools/tests/test_egg_info.py": true
+}

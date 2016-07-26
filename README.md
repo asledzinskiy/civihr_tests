@@ -11,4 +11,4 @@ virtualenv --no-site-packages react-venv
 pip install -r requirements.txt
 
 #run tests
-py.test -v 
+py.test tests/test_example.py 
