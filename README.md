@@ -13,4 +13,5 @@ pip install -r requirements.txt
 #run tests
 WORKSPACE=$(pwd)
 export PYTHONPATH="${PYTHONPATH:+${PYTHONPATH}:}${WORKSPACE}"
+
 py.test tests/test_example.py 
