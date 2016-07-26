@@ -38,6 +38,15 @@ class ExamplePage(BasePage):
         return self.driver.find_element_by_xpath(
             "//button[@class='clear-completed']")
 
+    @property
+    def get_edit_element(self):
+        return self.driver.find_element_by_xpath(
+            "//input[@class='edit']")
+
+    def get_item_count(self):
+        return int(self.driver.find_element_by_xpath(
+            "//span[@class='todo-count']/strong").text)
+
     def get_todo_by_name(self, name):
         return self.driver.find_element_by_xpath(
             "//div[@class='view']/label[.='{}']".format(name))
@@ -60,6 +69,13 @@ class ExamplePage(BasePage):
     def delete_todo_by_name(self, name):
         button = self.get_delete_todo_by_name(name)
         self.driver.execute_script("arguments[0].click();", button)
+
+    def edit_todo(self, name, newname):
+        todo_element = self.get_todo_by_name(name)
+        actions = ActionChains(self.driver)
+        actions.move_to_element(todo_element).double_click(todo_element).perform()
+        self.get_edit_element.send_keys(newname)
+        self.get_edit_element.send_keys(Keys.RETURN)
 
     def click_all_filter(self):
         self.get_all_filter.click()

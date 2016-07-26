@@ -11,4 +11,6 @@ virtualenv --no-site-packages react-venv
 pip install -r requirements.txt
 
 #run tests
+WORKSPACE=$(pwd)
+export PYTHONPATH="${PYTHONPATH:+${PYTHONPATH}:}${WORKSPACE}"
 py.test tests/test_example.py 
