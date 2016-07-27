@@ -17,7 +17,7 @@ class TestReactPage(object):
     def teardown_class(cls):
         browser.quit_driver()
 
-    def test_add_todo(self):
+    def test_add_delete_todo(self):
         """Add todo
 
         Scenario:
@@ -26,6 +26,7 @@ class TestReactPage(object):
             3. Check todo is present on active filter
             4. Check todo isn't present on completed filter
             5. Delete todo
+            6. Check todo isn't present
         """
         self.example_page.create_todo("test1")
         assert self.example_page.check_todo_present("test1"),\
@@ -37,8 +38,9 @@ class TestReactPage(object):
         assert self.example_page.check_todo_not_present("test1"),\
             "Element test1 present on completed tab"
         self.example_page.click_all_filter()
-
         self.example_page.delete_todo_by_name("test1")
+        assert self.example_page.check_todo_not_present("test1"),\
+            "Element test1 present on completed tab"
 
     def test_complete_todo(self):
         """Complete todo
