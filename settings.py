@@ -6,6 +6,8 @@ BROWSER = os.environ.get('BROWSER', 'firefox')
 CHROME_EXECUTABLE_PATH = \
     os.environ.get('CHROME_EXECUTABLE_PATH', '/usr/bin/google-chrome')
 
-URL_HOME = os.environ.get('URL_HOME', 'http://todomvc.com/examples/react/#/')
+URL_HOME = os.environ.get('URL_HOME', None)
+USERNAME = os.environ.get('USERNAME', None)
+PASSWORD = os.environ.get('PASSWORD', None)
 
-SELENIUM_IMPLICIT_WAIT = os.environ.get('SELENIUM_IMPLICIT_WAIT', 3)
+SELENIUM_IMPLICIT_WAIT = os.environ.get('SELENIUM_IMPLICIT_WAIT', 5)
