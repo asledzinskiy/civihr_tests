@@ -1,7 +1,7 @@
 import pytest
 
 import browser
-from pages.example_page import ExamplePage
+from pages.contact_page import ExamplePage
 from settings import URL_HOME
 
 
