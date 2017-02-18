@@ -1,8 +1,5 @@
 import settings
 from base_page import BasePage
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import Select
 
 
@@ -15,19 +12,19 @@ class ContactPage(BasePage):
         super(ContactPage, self).__init__(driver)
 
     @property
-    def job_contract(self):
+    def job_contract_tab(self):
         return self.driver.find_element_by_id("tab_hrjobcontract")
 
     @property
-    def job_role(self):
+    def job_role_tab(self):
         return self.driver.find_element_by_id("tab_hrjobroles")
 
     @property
-    def add_contract(self):
+    def add_contract_button(self):
         return self.driver.find_element_by_xpath("//*[@id='hrjob-contract']/div/p/button")
 
     @property
-    def add_job_role(self):
+    def add_job_role_button(self):
         return self.driver.find_element_by_xpath("//*[@id='hrjobroles']/div/button")
 
     @property
@@ -70,3 +67,65 @@ class ContactPage(BasePage):
     @property
     def job_end_date(self):
         return self.driver.find_element_by_id("hrjobroles-newEndDate")
+
+    def add_new_contract(self, position, contract_type, start_date, end_date=None):
+        self.job_contract_tab.click()
+        self.add_contract_button.click()
+        self.contract_position.send_keys(position)
+        self.contract_type.select_by_index(contract_type)
+        self.contract_start_date.send_keys(start_date)
+        if end_date:
+            self.contract_end_date.send_keys(end_date)
+        self.save_contract.click()
+
+    def add_new_job_role(self, title, contract, start_date=None, end_date=None, modify=False):
+        self.job_role_tab.click()
+        self.job_title.send_keys(title)
+        self.job_role_contract.select_by_value(contract)
+        if modify:
+            self.job_start_date.send_keys(start_date)
+            if end_date:
+                self.job_end_date.send_keys(end_date)
+        start_date = self.get_start_date()
+        end_date = self.get_end_date()
+        self.save_job_role.click()
+        return start_date, end_date
+
+    def get_start_date(self):
+        return self.job_start_date.text()
+
+    def get_end_date(self):
+        return self.job_end_date.text()
+
+    def get_role_start_date(self, role_name):
+        el = self.driver.find_element_by_xpath("//div[@class='hrjobroles-basic-details']/"
+                                               "div/div/div/div/p[text()={}]/../../.."
+                                               "/div[3]/div/p".format(role_name))
+        return el.text()
+
+    def get_role_end_date(self, role_name):
+        el = self.driver.find_element_by_xpath("//div[@class='hrjobroles-basic-details']/"
+                                               "div/div/div/div/p[text()={}]/../../.."
+                                               "/div[4]/div/p".format(role_name))
+        return el.text()
+
+    def delete_job_role(self, role_name):
+        el = self.driver.find_element_by_xpath(
+            "//div/div/div/div/div/span[text()={}]/"
+            "../../../../../div[2]/div[2]/"
+            "div/div[2]/div/button".format(role_name))
+        el.click()
+        self.driver.find_element_by_xpath("//button[text()='Yes']").click()
+
+    def delete_job_contract(self, contract_name):
+        details_button = self.driver.find_element_by_xpath(
+            "//li/div/div/div/div/div/div/p[text()={}]/"
+            "../../../../../../div[2]/"
+            "div/div/a".format(contract_name))
+        details_button.click()
+        del_button = self.driver.find_element_by_xpath(
+            "//li/div/div/div/div/div/div/p[text()={}]/"
+            "../../../../../../div[2]/div[2]/div/"
+            "div[2]/div/button".format(contract_name))
+        del_button.click()
+        self.driver.find_element_by_xpath("//button[text()='Yes']").click()
