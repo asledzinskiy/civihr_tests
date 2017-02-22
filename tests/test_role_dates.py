@@ -1,11 +1,12 @@
 import browser
+
 from pages.contact_page import ContactPage
 from pages.login_page import LoginPage
 from settings import URL_HOME
 from utils import helpers
 
 
-class TestReactPage(object):
+class TestContactPage(object):
 
     @classmethod
     def setup_class(cls):
@@ -28,15 +29,17 @@ class TestReactPage(object):
             2. Create job role, leave default contract dates
             3. Check job role dates are equal to job contract dates
         """
+        self.driver.get(self.contact_page.contact_url)
         role_name = "test role"
         contract_name = "test contract"
         set_start_date = helpers.generate_current_date()
-        set_end_date = helpers.generate_half_year_date()
+        set_end_date = helpers.generate_date_future_month()
         self.contact_page.add_new_contract(contract_name, 1,
                                            set_start_date,
                                            set_end_date)
         start_date, end_date = self.contact_page.add_new_job_role(role_name,
-                                                                  contract_name)
+                                                                  1)
+        print("start date is {}, end date is {}".format(start_date, end_date))
         assert set_start_date == start_date, "start date was wrongly prefilled," \
                                              " it should be {}," \
                                              " it is {}".format(set_start_date, start_date)
@@ -51,7 +54,11 @@ class TestReactPage(object):
         assert set_end_date == role_end_date, "end date was wrongly prefilled," \
                                               " it should be {}," \
                                               " it is {}".format(set_end_date, role_end_date)
+        self.driver.get(URL_HOME)
+        self.driver.get(self.contact_page.contact_url)
         self.contact_page.delete_job_role(role_name)
+        self.driver.get(URL_HOME)
+        self.driver.get(self.contact_page.contact_url)
         self.contact_page.delete_job_contract(contract_name)
 
     def test_job_role_modified_dates(self):
@@ -62,6 +69,8 @@ class TestReactPage(object):
             2. Create job role, change default contract dates
             3. Check job role dates are the same as they were specified
         """
+        self.driver.get(URL_HOME)
+        self.driver.get(self.contact_page.contact_url)
         role_name = "test role 2"
         contract_name = "test contract 2"
         self.contact_page.add_new_contract(contract_name, 1,
@@ -69,16 +78,10 @@ class TestReactPage(object):
                                            helpers.generate_half_year_date())
         set_start_date = helpers.generate_date_future_day()
         set_end_date = helpers.generate_date_future_month()
-        start_date, end_date = self.contact_page.add_new_job_role(role_name,
-                                                                  contract_name,
-                                                                  start_date=set_start_date,
-                                                                  end_date=set_end_date)
-        assert set_start_date == start_date, "start date was wrongly prefilled," \
-                                             " it should be {}," \
-                                             " it is {}".format(set_start_date, start_date)
-        assert set_end_date == end_date, "end date was wrongly prefilled," \
-                                         " it should be {}," \
-                                         " it is {}".format(set_end_date, end_date)
+        self.contact_page.add_new_job_role(role_name,
+                                           1,
+                                           start_date=set_start_date,
+                                           end_date=set_end_date, modify=True)
         role_start_date = self.contact_page.get_role_start_date(role_name)
         role_end_date = self.contact_page.get_role_end_date(role_name)
         assert set_start_date == role_start_date, "start date was wrongly prefilled," \
@@ -87,5 +90,9 @@ class TestReactPage(object):
         assert set_end_date == role_end_date, "end date was wrongly prefilled," \
                                               " it should be {}," \
                                               " it is {}".format(set_end_date, role_end_date)
+        self.driver.get(URL_HOME)
+        self.driver.get(self.contact_page.contact_url)
         self.contact_page.delete_job_role(role_name)
+        self.driver.get(URL_HOME)
+        self.driver.get(self.contact_page.contact_url)
         self.contact_page.delete_job_contract(contract_name)

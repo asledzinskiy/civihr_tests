@@ -9,6 +9,6 @@ CHROME_EXECUTABLE_PATH = \
 URL_HOME = os.environ.get('URL_HOME', None)
 USERNAME = os.environ.get('USERNAME', None)
 PASSWORD = os.environ.get('PASSWORD', None)
-USER_ID = os.environ.get('USER_ID', 306)
+USER_ID = os.environ.get('USER_ID', 374)
 
 SELENIUM_IMPLICIT_WAIT = os.environ.get('SELENIUM_IMPLICIT_WAIT', 5)

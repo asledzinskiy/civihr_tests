@@ -1,7 +1,4 @@
 from base_page import BasePage
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
 import settings
 
 
@@ -20,9 +17,15 @@ class LoginPage(BasePage):
 
     @property
     def login_button(self):
-        return self.driver.find_element_by_id("edit-submit")
+        return self.driver.find_element_by_xpath("//*[@id='edit-submit']")
 
     def log_in(self, username=settings.USERNAME, password=settings.PASSWORD):
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        self.login_button.click()
+        import time
+        time.sleep(3)
         self.username.send_keys(username)
         self.password.send_keys(password)
+        time.sleep(3)
         self.login_button.click()
+        time.sleep(3)
